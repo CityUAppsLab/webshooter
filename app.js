@@ -5,7 +5,7 @@ var config = require('./config');
 
 var webshooter = require('./webshooter');
 
-var dateFormat = require('dateFormat');
+var dateFormat = require('dateformat');
 var schedule = require('node-schedule');
 
 
