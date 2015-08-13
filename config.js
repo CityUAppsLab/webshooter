@@ -3,6 +3,12 @@
  */
 
 module.exports = {
+    mongodb: {
+        host: "localhost",
+        username: "root",
+        password: "bitnami",
+        database: "cityuwebmon"
+    },
     smtp: {
         host: "smtp.sendgrid.net",
         username: 'azure_406a31418a4f11d2b6a1ceb61f2ee5d8@azure.com',

@@ -9,7 +9,13 @@ var dateFormat = require('dateformat');
 var schedule = require('node-schedule');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/calwebmon');
+var mongodbOptions = {
+    user: config.mongodb.username,
+    password: config.mongodb.password
+}
+mongoose.connect('mongodb://' + config.mongodb.host + "/" + config.mongodb.database, mongodbOptions, function (err) {
+    console.log(err || "mongodb connection OK");
+});
 
 
 var Log = mongoose.model('Log', {
@@ -25,7 +31,7 @@ var interval = '*/' + config.interval + ' * * * *';
 
 var CV_HOME_URL = 'https://compassvisa.com.hk';
 var CV_API_URL = 'https://www.compassvisa.com.hk/iphoneapi/getLoginUserInfo.ashx';
-var BENCHMARK_URL = 'www.google.com';
+var BENCHMARK_URL = 'google.com';
 
 schedule.scheduleJob(interval, function () {
 
@@ -68,11 +74,15 @@ schedule.scheduleJob(interval, function () {
                         "   URL: " + CV_HOME_URL + "<br>" +
                         "   STATUS: unreachable<br>" +
                         "   TIME: " + startTime + "<br>" +
+                        "   Elapsed: " + cvHomeLog.elapsed + "<br>" +
                         "<br>" +
                         "Please take corresponding action for the connection check.<br>" +
                         "Note: connection issue may be due to poor network connection at host.<br>"
 
                         , alternative: true
+                    },
+                    {
+                        path: "screenshot/cv_home/" + filename, name: filename
                     }
                 ]
             };
@@ -119,11 +129,15 @@ schedule.scheduleJob(interval, function () {
                         "   URL: " + CV_API_URL + "<br>" +
                         "   STATUS: unreachable<br>" +
                         "   TIME: " + startTime + "<br>" +
+                        "   Elapsed: " + cvAPILog.elapsed + "<br>" +
                         "<br>" +
                         "Please take corresponding action for the connection check.<br>" +
                         "Note: connection issue may be due to poor network connection at host.<br>"
 
                         , alternative: true
+                    },
+                    {
+                        path: "screenshot/cv_api/" + filename, name: filename
                     }
                 ]
             };
@@ -144,14 +158,14 @@ schedule.scheduleJob(interval, function () {
 
         console.log("Elapsed Time = " + (endTime - startTime) + "ms");
 
-        var benchmarkUrl = new Log({
+        var benchmarkLog = new Log({
             url: BENCHMARK_URL,
             startTime: startTime,
             endTime: endTime,
             elapsed: (endTime - startTime)
         });
 
-        benchmarkUrl.save();
+        benchmarkLog.save();
 
         if (true) {
             var email = {
@@ -170,6 +184,7 @@ schedule.scheduleJob(interval, function () {
                         "   URL: " + BENCHMARK_URL + "<br>" +
                         "   STATUS: unreachable<br>" +
                         "   TIME: " + startTime + "<br>" +
+                        "   Elapsed: " + benchmarkLog.elapsed + "<br>" +
                         "<br>" +
                         "Please take corresponding action for the connection check.<br>" +
                         "Note: connection issue may be due to poor network connection at host.<br>"
@@ -177,7 +192,7 @@ schedule.scheduleJob(interval, function () {
                         , alternative: true
                     },
                     {
-                        path: "screenshot/google/" + filename, name: filename
+                        path: "screenshot/benchmark/" + filename, name: filename
                     }
                 ]
             };
