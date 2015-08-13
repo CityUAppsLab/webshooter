@@ -13,7 +13,11 @@ var mongodbOptions = {
     user: config.mongodb.username,
     password: config.mongodb.password
 }
-mongoose.connect('mongodb://' + config.mongodb.host + "/" + config.mongodb.database, mongodbOptions, function (err) {
+mongoose.connect('mongodb://' +
+    config.mongodb.username + ":" +
+    config.mongodb.password + "@" +
+    config.mongodb.host + "/" +
+    config.mongodb.database, function (err) {
     console.log(err || "mongodb connection OK");
 });
 
