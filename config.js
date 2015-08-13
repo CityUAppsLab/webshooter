@@ -3,13 +3,12 @@
  */
 
 module.exports = {
-    url: "the-url-your-want-to-monitor",
     smtp: {
-        host: "your-smtp-host",
-        username: 'your-smtp-username',
-        password: 'your-smtp-password'
+        host: "smtp.sendgrid.net",
+        username: 'azure_406a31418a4f11d2b6a1ceb61f2ee5d8@azure.com',
+        password: '3YnaF9yte4ozQPO'
     },
-    senderAddress: 'your-sender-address',
-    recipients: ['your-recipients'],
+    senderAddress: 'noreply@appslab.hk',
+    recipients: ['hoyeungjasonliu@gmail.com', 'kinni.mew@gmail.com'],
     interval: 1 // minute, the smallest interval is 1 minute
 }

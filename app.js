@@ -8,47 +8,189 @@ var webshooter = require('./webshooter');
 var dateFormat = require('dateformat');
 var schedule = require('node-schedule');
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/calwebmon');
 
-schedule.scheduleJob('*/' + config.interval + ' * * * *', function () {
+
+var Log = mongoose.model('Log', {
+    url: {type: String},
+    startTime: {type: Date},
+    endTime: {type: Date},
+    elapsed: {type: Number}
+});
+
+
+var interval = '*/' + config.interval + ' * * * *';
+
+
+var CV_HOME_URL = 'https://compassvisa.com.hk';
+var CV_API_URL = 'https://www.compassvisa.com.hk/iphoneapi/getLoginUserInfo.ashx';
+var BENCHMARK_URL = 'www.google.com';
+
+schedule.scheduleJob(interval, function () {
 
     var startTime = new Date();
 
     console.log("job started at " + startTime);
 
-    var now = dateFormat(startTime, 'yyyymmddHHMM');
-    var outputFilePath = 'screenshots/' + now + '.png';
+    var filename = dateFormat(startTime, 'yyyymmddHHMM') + '.png';
 
-    webshooter.takeScreenshot(config.url, outputFilePath, function (err) {
+    // Check https://compassvisa.com.hk
+    webshooter.takeScreenshot(CV_HOME_URL, "screenshot/cv_home/" + filename, function (err) {
 
         var endTime = new Date();
 
         console.log("Elapsed Time = " + (endTime - startTime) + "ms");
 
-        var email = {
-            to: config.recipients
-        };
-
-        if (err) {
-
-            // Connection error
-            email.subject = 'Webshooter - ' + config.url;
-            email.text = "Connection Alert";
-
-        } else {
-
-            // Everything works fine
-            email.subject = 'Webshooter - ' + config.url;
-            email.text = "Elapsed Time = " + (endTime - startTime) + "ms";
-            email.attachment = [
-                {path: outputFilePath, name: now + ".png"}
-            ]
-        }
-
-        webshooter.send(email, function (err, result) {
+        var cvHomeLog = new Log({
+            url: CV_HOME_URL,
+            startTime: startTime,
+            endTime: endTime,
+            elapsed: (endTime - startTime)
         });
 
-    })
-});
+        cvHomeLog.save();
 
+        if (true) {
+            var email = {
+                subject: 'Connection Alert - ' + CV_HOME_URL,
+                text: "Dear Sir/Madam\n\n" +
+                "This is a auto-generated message to alert on connection issue:\n\n" +
+                "    URL: " + CV_HOME_URL + "\n" +
+                "    STATUS: unreachable\n" +
+                "    TIME: " + startTime + "\n\n" +
+                "Please take corresponding action for the connection check.\n\n" +
+                "Note: connection issue may be due to poor network connection at host.\n",
+                attachment: [
+                    {
+                        data: "Dear Sir/Madam<br><br>" +
+                        "This is an auto-generated message to alert you on the coonection issue.<br><br>" +
+                        "   URL: " + CV_HOME_URL + "<br>" +
+                        "   STATUS: unreachable<br>" +
+                        "   TIME: " + startTime + "<br>" +
+                        "<br>" +
+                        "Please take corresponding action for the connection check.<br>" +
+                        "Note: connection issue may be due to poor network connection at host.<br>"
+
+                        , alternative: true
+                    }
+                ]
+            };
+
+            webshooter.send(email, function (err, result) {
+                console.log(err || result);
+            });
+
+        }
+
+
+    });
+
+    // Check https://www.compassvisa.com.hk/iphoneapi/getLoginUserInfo.ashx
+    webshooter.takeScreenshot(CV_API_URL, "screenshot/cv_api/" + filename, function (err) {
+
+        var endTime = new Date();
+
+        console.log("Elapsed Time = " + (endTime - startTime) + "ms");
+
+        var cvAPILog = new Log({
+            url: CV_API_URL,
+            startTime: startTime,
+            endTime: endTime,
+            elapsed: (endTime - startTime)
+        });
+
+        cvAPILog.save();
+
+        if (true) {
+            var email = {
+                subject: 'Connection Alert - ' + CV_API_URL,
+                text: "Dear Sir/Madam\n\n" +
+                "This is a auto-generated message to alert on connection issue:\n\n" +
+                "    URL: " + CV_API_URL + "\n" +
+                "    STATUS: unreachable\n" +
+                "    TIME: " + startTime + "\n\n" +
+                "Please take corresponding action for the connection check.\n\n" +
+                "Note: connection issue may be due to poor network connection at host.\n",
+                attachment: [
+                    {
+                        data: "Dear Sir/Madam<br><br>" +
+                        "This is an auto-generated message to alert you on the coonection issue.<br><br>" +
+                        "   URL: " + CV_API_URL + "<br>" +
+                        "   STATUS: unreachable<br>" +
+                        "   TIME: " + startTime + "<br>" +
+                        "<br>" +
+                        "Please take corresponding action for the connection check.<br>" +
+                        "Note: connection issue may be due to poor network connection at host.<br>"
+
+                        , alternative: true
+                    }
+                ]
+            };
+
+            webshooter.send(email, function (err, result) {
+                console.log(err || result);
+            });
+
+        }
+
+
+    });
+
+    // Check https://www.google.com.hk/ as benchmark
+    webshooter.takeScreenshot(BENCHMARK_URL, "screenshot/benchmark/" + filename, function (err) {
+
+        var endTime = new Date();
+
+        console.log("Elapsed Time = " + (endTime - startTime) + "ms");
+
+        var benchmarkUrl = new Log({
+            url: BENCHMARK_URL,
+            startTime: startTime,
+            endTime: endTime,
+            elapsed: (endTime - startTime)
+        });
+
+        benchmarkUrl.save();
+
+        if (true) {
+            var email = {
+                subject: 'Connection Alert - ' + BENCHMARK_URL,
+                text: "Dear Sir/Madam\n\n" +
+                "This is a auto-generated message to alert on connection issue:\n\n" +
+                "    URL: " + BENCHMARK_URL + "\n" +
+                "    STATUS: unreachable\n" +
+                "    TIME: " + startTime + "\n\n" +
+                "Please take corresponding action for the connection check.\n\n" +
+                "Note: connection issue may be due to poor network connection at host.\n",
+                attachment: [
+                    {
+                        data: "Dear Sir/Madam<br><br>" +
+                        "This is an auto-generated message to alert you on the coonection issue.<br><br>" +
+                        "   URL: " + BENCHMARK_URL + "<br>" +
+                        "   STATUS: unreachable<br>" +
+                        "   TIME: " + startTime + "<br>" +
+                        "<br>" +
+                        "Please take corresponding action for the connection check.<br>" +
+                        "Note: connection issue may be due to poor network connection at host.<br>"
+
+                        , alternative: true
+                    },
+                    {
+                        path: "screenshot/google/" + filename, name: filename
+                    }
+                ]
+            };
+
+            webshooter.send(email, function (err, result) {
+                console.log(err || result);
+            });
+
+        }
+
+
+    });
+
+});
 
 console.log("Let's go! " + new Date());

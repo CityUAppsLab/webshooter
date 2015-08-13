@@ -25,7 +25,10 @@ module.exports = {
      * @param callback The callback when the process is done.
      */
     takeScreenshot: function (url, outputPath, callback) {
+
+
         webshot(url, outputPath, function (err) {
+            console.log(err);
             callback(err);
         });
     },
@@ -40,6 +43,10 @@ module.exports = {
 
         // ensure sender address is set
         email.from = config.senderAddress;
+
+        if (!email.to){
+            email.to = config.recipients;
+        }
 
         emailServer.send(email, function (err, message) {
             callback(err, message);

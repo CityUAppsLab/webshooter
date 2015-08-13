@@ -1,7 +1,7 @@
 {
-  "name": "webshooter",
+  "name": "calwebmon",
   "version": "1.0.0",
-  "description": "toc",
+  "description": "A node app provides availablity test to monitor CV's website",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -16,6 +16,7 @@
   "dependencies": {
     "dateformat": "^1.0.11",
     "emailjs": "^0.3.16",
+    "mongoose": "^4.1.2",
     "node-schedule": "^0.2.9",
     "webshot": "^0.16.0"
   },

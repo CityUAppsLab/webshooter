@@ -13,8 +13,9 @@ var now = dateFormat('yyyymmddHHMM');
 var outputFilePath = 'screenshots/' + now + '.png';
 
 describe('Screenshot', function () {
-    it('should save screenshot of ' + config.url + ' to ' + outputFilePath + '.', function (done) {
-        webshooter.takeScreenshot(config.url, outputFilePath, function (err) {
+    var testUrl = "www.google.com.hk"
+    it('should save screenshot of ' + testUrl + ' to ' + outputFilePath + '.', function (done) {
+        webshooter.takeScreenshot(testUrl, outputFilePath, function (err) {
 
             expect(err).to.be.null;
 
