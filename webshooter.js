@@ -28,8 +28,7 @@ module.exports = {
 
 
         webshot(url, outputPath, function (err) {
-            console.log(err);
-            callback(err);
+            callback(err, url);
         });
     },
 

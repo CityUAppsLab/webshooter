@@ -5,8 +5,8 @@
 module.exports = {
     mongodb: {
         host: "localhost",
-        username: "root",
-        password: "bitnami",
+        username: "",
+        password: "",
         database: "cityuwebmon"
     },
     smtp: {
@@ -16,5 +16,9 @@ module.exports = {
     },
     senderAddress: 'noreply@appslab.hk',
     recipients: ['hoyeungjasonliu@gmail.com', 'kinni.mew@gmail.com'],
-    interval: 1 // minute, the smallest interval is 1 minute
+    interval: 1, // minute, the smallest interval is 1 minute,
+    dailySummaryAt: {
+        hour: 0,
+        minute: 0
+    }
 }
