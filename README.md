@@ -21,7 +21,7 @@ forever start app.js
 
 ## Test
 
-Tests are written with [Mocha](http://visionmedia.github.com/mocha/) and can be run with `npm test`.
+Tests are written with [Mocha](http://mochajs.org/) and can be run with `npm test`.
 
 
 
